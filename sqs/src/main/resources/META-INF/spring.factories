@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  SqsAutoConfiguration
+  co.cargoai.sqs.internal.SqsAutoConfiguration
