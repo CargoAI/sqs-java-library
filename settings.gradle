@@ -1,2 +1,2 @@
-include 'sqs-starter'
-include 'sqs-starter-test'
+include 'sqs'
+include 'sqs-test'
