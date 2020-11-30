@@ -11,3 +11,23 @@ dependencies {
     testImplementation 'org.awaitility:awaitility:3.0.0'
     testImplementation 'cloud.localstack:localstack-utils:0.2.1'
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/CargoAI/sqs")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                groupId = 'co.cargoai.sqs'
+                artifactId = 'sqs-library'
+                from(components.java)
+            }
+        }
+    }
+}
