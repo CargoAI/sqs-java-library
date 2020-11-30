@@ -1,4 +1,4 @@
-![CI/CD](https://github.com/cargoai/sqs-library/workflows/CI/CD/badge.svg?branch=master)
+![CI/CD](https://github.com/cargoai/sqs/workflows/CI/CD/badge.svg?branch=master)
 
 # sqs-starter
 A Spring Boot starter to send and consume messages to / from an AWS SQS queue in a robust manner.
