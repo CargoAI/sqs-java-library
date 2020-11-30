@@ -21,7 +21,7 @@ jobs:
       - name: Publish package
         run: chmod 755 gradlew && ./gradlew publish -Dci=true
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.DUMMY_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_KEY: ${{ secrets.DUMMY_AWS_SECRET_KEY }}
