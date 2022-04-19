@@ -1,23 +1,22 @@
 package co.cargoai.sqs.internal;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sqs.SqsClient;
+
+import java.net.URI;
 
 @Configuration
 class TestMessageHandlerConfiguration {
 
     @Bean
-    AmazonSQS sqsClient() {
-        AmazonSQSClientBuilder builder = AmazonSQSClientBuilder.standard();
-        builder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
-                "http://localhost:4576",
-                "us-east"
-        ));
-        return builder.build();
+    SqsClient sqsClient() {
+        return SqsClient.builder()
+                .endpointOverride(URI.create("http://localhost:4576"))
+                .region(Region.US_EAST_1)
+                .build();
     }
 
     @Bean
@@ -26,12 +25,12 @@ class TestMessageHandlerConfiguration {
     }
 
     @Bean
-    TestMessageHandlerRegistration testMessageHandlerRegistration(AmazonSQS sqsClient, ObjectMapper objectMapper, TestMessageHandler messageHandler) {
+    TestMessageHandlerRegistration testMessageHandlerRegistration(SqsClient sqsClient, ObjectMapper objectMapper, TestMessageHandler messageHandler) {
         return new TestMessageHandlerRegistration(sqsClient, objectMapper, messageHandler);
     }
 
     @Bean
-    TestMessagePublisher testMessagePublisher(AmazonSQS sqsClient, ObjectMapper objectMapper) {
+    TestMessagePublisher testMessagePublisher(SqsClient sqsClient, ObjectMapper objectMapper) {
         return new TestMessagePublisher(sqsClient, objectMapper);
     }
 

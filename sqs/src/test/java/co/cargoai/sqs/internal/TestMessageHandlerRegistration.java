@@ -4,17 +4,17 @@ import co.cargoai.sqs.api.SqsMessageHandler;
 import co.cargoai.sqs.api.SqsMessageHandlerProperties;
 import co.cargoai.sqs.api.SqsMessageHandlerRegistration;
 import co.cargoai.sqs.api.SqsMessagePollerProperties;
-import com.amazonaws.services.sqs.AmazonSQS;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 class TestMessageHandlerRegistration implements SqsMessageHandlerRegistration<TestMessage> {
 
-    private final AmazonSQS client;
+    private final SqsClient client;
     private final ObjectMapper objectMapper;
     private final TestMessageHandler messageHandler;
 
     public TestMessageHandlerRegistration(
-            AmazonSQS client,
+            SqsClient client,
             ObjectMapper objectMapper,
             TestMessageHandler messageHandler) {
         this.client = client;
@@ -43,7 +43,7 @@ class TestMessageHandlerRegistration implements SqsMessageHandlerRegistration<Te
     }
 
     @Override
-    public AmazonSQS sqsClient() {
+    public SqsClient sqsClient() {
         return this.client;
     }
 

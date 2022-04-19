@@ -1,15 +1,16 @@
 package co.cargoai.sqs.internal;
 
+import co.cargoai.sqs.api.ExceptionHandler;
 import co.cargoai.sqs.api.SqsMessageHandler;
 import co.cargoai.sqs.api.SqsMessagePollerProperties;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.model.Message;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import co.cargoai.sqs.api.ExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
+import software.amazon.awssdk.services.sqs.model.Message;
 
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -29,7 +30,7 @@ class SqsMessagePoller<T> {
     private final SqsMessageHandler<T> messageHandler;
     private final SqsMessageFetcher messageFetcher;
     private final SqsMessagePollerProperties pollingProperties;
-    private final AmazonSQS sqsClient;
+    private final SqsClient sqsClient;
     private final ObjectMapper objectMapper;
     private final ScheduledThreadPoolExecutor pollerThreadPool;
     private final ThreadPoolExecutor handlerThreadPool;
@@ -67,13 +68,13 @@ class SqsMessagePoller<T> {
 
     private void handleMessage(Message sqsMessage) {
         try {
-            final T message = objectMapper.readValue(sqsMessage.getBody(), messageHandler.messageType());
+            final T message = objectMapper.readValue(sqsMessage.body(), messageHandler.messageType());
             handlerThreadPool.submit(() -> {
                 try {
                     messageHandler.onBeforeHandle(message);
                     messageHandler.handle(message);
                     acknowledgeMessage(sqsMessage);
-                    logger.debug("message {} processed successfully - message has been deleted from SQS", sqsMessage.getMessageId());
+                    logger.debug("message {} processed successfully - message has been deleted from SQS", sqsMessage.messageId());
                 } catch (Exception e) {
                     ExceptionHandler.ExceptionHandlerDecision result = exceptionHandler.handleException(sqsMessage, e);
                     switch (result) {
@@ -90,12 +91,16 @@ class SqsMessagePoller<T> {
 
             });
         } catch (JsonProcessingException e) {
-            logger.warn("error parsing message {}: ", sqsMessage.getMessageId(), e);
+            logger.warn("error handling message {}: {}", sqsMessage.messageId(), e.getMessage());
         }
     }
 
     private void acknowledgeMessage(Message message) {
-        sqsClient.deleteMessage(pollingProperties.getQueueUrl(), message.getReceiptHandle());
+        DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
+                .queueUrl(pollingProperties.getQueueUrl())
+                .receiptHandle(message.receiptHandle())
+                .build();
+        sqsClient.deleteMessage(deleteMessageRequest);
     }
 
 }

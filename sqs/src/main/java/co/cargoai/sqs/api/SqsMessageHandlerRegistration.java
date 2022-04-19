@@ -1,7 +1,7 @@
 package co.cargoai.sqs.api;
 
-import com.amazonaws.services.sqs.AmazonSQS;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 /**
  * Include a bean of this type in the Spring application context to register a poller that polls messages
@@ -34,7 +34,7 @@ public interface SqsMessageHandlerRegistration<T> {
     /**
      * The SQS client to use for polling messages from SQS.
      */
-    AmazonSQS sqsClient();
+    SqsClient sqsClient();
 
     /**
      * The {@link ObjectMapper} to use for deserializing messages from SQS.

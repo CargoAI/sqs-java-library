@@ -1,6 +1,6 @@
 package co.cargoai.sqs.api;
 
-import com.amazonaws.services.sqs.model.Message;
+import software.amazon.awssdk.services.sqs.model.Message;
 
 public interface ExceptionHandler {
 

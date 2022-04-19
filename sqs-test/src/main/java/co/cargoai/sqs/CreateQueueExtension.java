@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 public class CreateQueueExtension implements BeforeEachCallback {
 
     @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+    public void beforeEach(ExtensionContext extensionContext) {
         SqsTest annotation = extensionContext.getRequiredTestClass().getAnnotation(SqsTest.class);
         for (String queueName : annotation.queueNames()) {
             createQueue(queueName);

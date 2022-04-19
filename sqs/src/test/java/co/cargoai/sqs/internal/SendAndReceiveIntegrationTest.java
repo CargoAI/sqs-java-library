@@ -1,11 +1,11 @@
 package co.cargoai.sqs.internal;
 
 import co.cargoai.sqs.SqsTest;
-import com.amazonaws.services.sqs.AmazonSQS;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +18,7 @@ import static org.awaitility.Awaitility.await;
 class SendAndReceiveIntegrationTest {
 
     @Autowired
-    private AmazonSQS sqsClient;
+    private SqsClient sqsClient;
 
     @Autowired
     private TestMessageHandler messageHandler;
