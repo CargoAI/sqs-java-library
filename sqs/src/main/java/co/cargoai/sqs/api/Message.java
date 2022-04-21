@@ -1,12 +1,14 @@
 package co.cargoai.sqs.api;
 
 import lombok.Builder;
+import lombok.Getter;
 import software.amazon.awssdk.services.sqs.model.MessageSystemAttributeName;
 
 import java.util.Map;
 
 @Builder
+@Getter
 public class Message<T> {
-    T body;
-    Map<MessageSystemAttributeName, String> attributes;
+    private T body;
+    private Map<MessageSystemAttributeName, String> attributes;
 }
