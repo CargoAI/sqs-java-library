@@ -15,7 +15,7 @@ public interface SqsMessageHandler<T> {
      * <p>
      * The default implementation does nothing.
      */
-    default void onBeforeHandle(T message) {
+    default void onBeforeHandle(Message<T> message) {
 
     }
 
@@ -26,18 +26,17 @@ public interface SqsMessageHandler<T> {
      * <p>
      * The default implementation does nothing.
      */
-    default void onAfterHandle(T message) {
+    default void onAfterHandle(Message<T> message) {
 
     }
 
     /**
      * Processes a message.
      */
-    void handle(T message);
+    void handle(Message<T> message);
 
     /**
      * Returns the type of messages this message handler can process.
      */
     Class<T> messageType();
-
 }

@@ -1,5 +1,6 @@
 package co.cargoai.sqs.internal;
 
+import co.cargoai.sqs.api.Message;
 import co.cargoai.sqs.api.SqsMessageHandler;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,7 +10,7 @@ class TestMessageHandler implements SqsMessageHandler<TestMessage> {
     private AtomicInteger counter = new AtomicInteger();
 
     @Override
-    public void handle(TestMessage message) {
+    public void handle(Message<TestMessage> message) {
         counter.incrementAndGet();
     }
 

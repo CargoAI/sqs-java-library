@@ -68,7 +68,11 @@ class SqsMessagePoller<T> {
 
     private void handleMessage(Message sqsMessage) {
         try {
-            final T message = objectMapper.readValue(sqsMessage.body(), messageHandler.messageType());
+            final T body = objectMapper.readValue(sqsMessage.body(), messageHandler.messageType());
+            co.cargoai.sqs.api.Message<T> message = co.cargoai.sqs.api.Message.<T>builder()
+                    .body(body)
+                    .attributes(sqsMessage.attributes())
+                    .build();
             handlerThreadPool.submit(() -> {
                 try {
                     messageHandler.onBeforeHandle(message);
