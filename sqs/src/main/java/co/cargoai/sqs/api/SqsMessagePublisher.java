@@ -73,6 +73,11 @@ public abstract class SqsMessagePublisher<T> {
                         .queueUrl(sqsQueueUrl)
                         .messageBody(objectMapper.writeValueAsString(message))
                         .build();
+            } else {
+                request = request.toBuilder()
+                        .queueUrl(sqsQueueUrl)
+                        .messageBody(objectMapper.writeValueAsString(message))
+                        .build();
             }
 
             SendMessageResponse result = sqsClient.sendMessage(request);
