@@ -16,7 +16,7 @@ jobs:
       - name: "Setup Java"
         uses: actions/setup-java@v1
         with:
-          java-version: 15
+          java-version: 19
 
       - name: Publish package
         run: chmod 755 gradlew && ./gradlew publish -Dci=true
