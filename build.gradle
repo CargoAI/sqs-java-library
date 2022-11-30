@@ -13,7 +13,7 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'maven-publish'
 
-    version = '0.0.25-SNAPSHOT'
+    version = '0.0.26-SNAPSHOT'
     sourceCompatibility = '17'
     targetCompatibility = '17'
 

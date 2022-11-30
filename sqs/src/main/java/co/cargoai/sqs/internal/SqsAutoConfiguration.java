@@ -1,16 +1,14 @@
 package co.cargoai.sqs.internal;
 
-import co.cargoai.sqs.api.DefaultExceptionHandler;
 import co.cargoai.sqs.api.SqsMessageHandlerRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
+@AutoConfiguration
 class SqsAutoConfiguration {
 
   private static final Logger logger = LoggerFactory.getLogger(SqsAutoConfiguration.class);
