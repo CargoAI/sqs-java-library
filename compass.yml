@@ -1,0 +1,17 @@
+name: sqs-java-library
+id: ari:cloud:compass:b635523d-8cfc-4e34-9ba2-6c8016260bcf:component/5a6d8fb7-db91-44f2-abc3-3671f8112a6f/8f645f2a-a5b4-4284-81cb-58abd767a1aa
+description: null
+configVersion: 1
+typeId: LIBRARY
+fields:
+  tier: 4
+links:
+  - name: null
+    type: REPOSITORY
+    url: https://github.com/CargoAI/sqs-java-library
+relationships:
+  DEPENDS_ON: []
+labels:
+  - language:java
+  - source:github
+customFields: null
