@@ -1,2 +1,1 @@
 include 'sqs'
-include 'sqs-test'
