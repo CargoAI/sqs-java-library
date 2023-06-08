@@ -11,7 +11,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.awaitility:awaitility:4.2.0'
-    testImplementation 'cloud.localstack:localstack-utils:0.2.21'
+    testImplementation 'cloud.localstack:localstack-utils:0.2.23'
 }
 
 publishing {
