@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class SqsMessageHandlerProperties {
 
-    private int handlerThreadPoolSize = 10;
+    private int handlerThreadPoolSize = 1;
 
     private int handlerQueueSize = 1000;
 
