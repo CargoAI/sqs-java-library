@@ -75,9 +75,9 @@ class SqsMessagePoller<T> {
                     .build();
             handlerThreadPool.submit(() -> {
                 try {
+                    acknowledgeMessage(sqsMessage);
                     messageHandler.onBeforeHandle(message);
                     messageHandler.handle(message);
-                    acknowledgeMessage(sqsMessage);
                     logger.debug("message {} processed successfully - message has been deleted from SQS", sqsMessage.messageId());
                 } catch (Exception e) {
                     ExceptionHandler.ExceptionHandlerDecision result = exceptionHandler.handleException(sqsMessage, e);

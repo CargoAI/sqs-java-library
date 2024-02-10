@@ -30,6 +30,7 @@ class SqsMessageFetcher {
             .maxNumberOfMessages(properties.getBatchSize())
             .queueUrl(properties.getQueueUrl())
             .waitTimeSeconds((int) properties.getWaitTime().getSeconds())
+            .visibilityTimeout(60)
             .build();
 
     ReceiveMessageResponse result = sqsClient.receiveMessage(request);
