@@ -71,6 +71,7 @@ class SqsMessagePoller<T> {
             final T body = objectMapper.readValue(sqsMessage.body(), messageHandler.messageType());
             co.cargoai.sqs.api.Message<T> message = co.cargoai.sqs.api.Message.<T>builder()
                     .body(body)
+                    .receiptHandle(sqsMessage.receiptHandle())
                     .attributes(sqsMessage.attributes())
                     .build();
             handlerThreadPool.submit(() -> {
