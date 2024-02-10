@@ -10,5 +10,6 @@ import java.util.Map;
 @Getter
 public class Message<T> {
     private T body;
+    private String receiptHandle;
     private Map<MessageSystemAttributeName, String> attributes;
 }
