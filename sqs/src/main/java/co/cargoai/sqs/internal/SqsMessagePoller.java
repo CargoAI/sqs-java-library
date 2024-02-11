@@ -72,14 +72,25 @@ class SqsMessagePoller<T> {
             co.cargoai.sqs.api.Message<T> message = co.cargoai.sqs.api.Message.<T>builder()
                     .body(body)
                     .receiptHandle(sqsMessage.receiptHandle())
+                    .messageId(sqsMessage.messageId())
                     .attributes(sqsMessage.attributes())
                     .build();
+            acknowledgeMessage(sqsMessage);
             handlerThreadPool.submit(() -> {
                 try {
-                    acknowledgeMessage(sqsMessage);
+                    long startTime = System.nanoTime();
                     messageHandler.onBeforeHandle(message);
                     messageHandler.handle(message);
-                    logger.debug("message {} processed successfully - message has been deleted from SQS", sqsMessage.messageId());
+                    long endTime = System.nanoTime();
+                    long durationInNano = endTime - startTime;
+                    double durationInMilliseconds = (double) durationInNano / 1_000_000.0;
+                    logger.debug("message {} processed successfully in {} - message has been deleted from SQS", sqsMessage.messageId(), durationInMilliseconds);
+                    if (durationInMilliseconds > 10000) {
+                        logger.info("message {} took more than 10 sec", sqsMessage.messageId());
+                    }
+                    if (durationInMilliseconds > 20000) {
+                        logger.error("error: message {} took more than 20sec", sqsMessage.messageId());
+                    }
                 } catch (Exception e) {
                     ExceptionHandler.ExceptionHandlerDecision result = exceptionHandler.handleException(sqsMessage, e);
                     switch (result) {
