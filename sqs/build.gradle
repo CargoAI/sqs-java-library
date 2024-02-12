@@ -4,7 +4,7 @@ dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter'
 
     testImplementation project(':sqs-test')
-    implementation 'software.amazon.awssdk:sqs:2.23.17'
+    implementation 'software.amazon.awssdk:sqs:2.24.0'
     implementation 'io.github.resilience4j:resilience4j-retry:2.2.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
