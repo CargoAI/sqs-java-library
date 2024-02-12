@@ -9,12 +9,12 @@ public interface ExceptionHandler {
         /**
          * Delete the message from SQS. It will not be retried.
          */
-        DELETE,
+        NOTHING,
 
         /**
          * Do not delete the message from SQS. In one of the next iterations, it will be polled by the poller again.
          */
-        RETRY;
+        DLQ;
 
     }
 

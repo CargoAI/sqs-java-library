@@ -13,6 +13,8 @@ public class SqsMessagePollerProperties {
      */
     private final String queueUrl;
 
+    private final String dlqUrl;
+
     private Duration pollDelay = Duration.of(1, ChronoUnit.SECONDS);
 
     private Duration waitTime = Duration.ofSeconds(1);
@@ -25,6 +27,11 @@ public class SqsMessagePollerProperties {
 
     public SqsMessagePollerProperties(String queueUrl) {
         this.queueUrl = queueUrl;
+        this.dlqUrl = "";
+    }
+    public SqsMessagePollerProperties(String queueUrl, String dlqUrl) {
+        this.queueUrl = queueUrl;
+        this.dlqUrl = dlqUrl;
     }
 
     /**
