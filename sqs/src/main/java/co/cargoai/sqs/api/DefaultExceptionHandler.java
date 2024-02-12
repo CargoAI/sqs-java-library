@@ -11,6 +11,6 @@ public class DefaultExceptionHandler implements ExceptionHandler {
     @Override
     public ExceptionHandlerDecision handleException(Message message, Exception e) {
         logger.warn("error while processing message {} - message has not been deleted from SQS and will be retried:", message.messageId(), e);
-        return ExceptionHandlerDecision.RETRY;
+        return ExceptionHandlerDecision.NOTHING;
     }
 }
