@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 import software.amazon.awssdk.services.sqs.model.Message;
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.SendMessageResponse;
 
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -84,7 +86,7 @@ class SqsMessagePoller<T> {
                     long endTime = System.nanoTime();
                     long durationInNano = endTime - startTime;
                     double durationInMilliseconds = (double) durationInNano / 1_000_000.0;
-                    logger.debug("message {} processed successfully in {} - message has been deleted from SQS", sqsMessage.messageId(), durationInMilliseconds);
+                    logger.info("message {} processed successfully in {}", sqsMessage.messageId(), durationInMilliseconds);
                     if (durationInMilliseconds > 10000) {
                         logger.info("message {} took more than 10 sec", sqsMessage.messageId());
                     }
@@ -94,11 +96,11 @@ class SqsMessagePoller<T> {
                 } catch (Exception e) {
                     ExceptionHandler.ExceptionHandlerDecision result = exceptionHandler.handleException(sqsMessage, e);
                     switch (result) {
-                        case RETRY:
-                            // do nothing ... the message hasn't been deleted from SQS yet, so it will be retried
+                        case NOTHING:
+                            // do nothing ... message is deleted
                             break;
-                        case DELETE:
-                            acknowledgeMessage(sqsMessage);
+                        case DLQ:
+                            transferToDLQ(sqsMessage);
                             break;
                     }
                 } finally {
@@ -108,6 +110,29 @@ class SqsMessagePoller<T> {
             });
         } catch (JsonProcessingException e) {
             logger.warn("error handling message {}: {}", sqsMessage.messageId(), e.getMessage());
+        }
+    }
+
+    private void transferToDLQ(Message message) {
+        try {
+            if (pollingProperties.getDlqUrl() == null || pollingProperties.getDlqUrl().isEmpty()) {
+                logger.error("cannot write to non existing DLQ");
+            }
+            var request = SendMessageRequest.builder()
+                    .queueUrl(pollingProperties.getDlqUrl())
+                    .messageBody(objectMapper.writeValueAsString(message.body()))
+                    .build();
+
+            SendMessageResponse result = sqsClient.sendMessage(request);
+
+            if (result.sdkHttpResponse().statusCode() != 200) {
+                throw new RuntimeException(String.format("got error response from SQS queue %s: %s",
+                        pollingProperties.getDlqUrl(),
+                        result.sdkHttpResponse()));
+            }
+
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("error sending message to SQS: ", e);
         }
     }
 
