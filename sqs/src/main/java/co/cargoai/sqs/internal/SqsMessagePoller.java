@@ -89,6 +89,7 @@ class SqsMessagePoller<T> {
                     logger.info("message {} processed successfully in {}", sqsMessage.messageId(), durationInMilliseconds);
                     if (durationInMilliseconds > 10000) {
                         logger.info("message {} took more than 10 sec", sqsMessage.messageId());
+                        logger.info(message.getBody().toString());
                     }
                     if (durationInMilliseconds > 20000) {
                         logger.error("error: message {} took more than 20sec", sqsMessage.messageId());
