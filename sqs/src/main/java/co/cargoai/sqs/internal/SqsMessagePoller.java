@@ -63,6 +63,7 @@ class SqsMessagePoller<T> {
             for (Message sqsMessage : messages) {
                 handleMessage(sqsMessage);
             }
+            logger.info("number of task scheduled: {}", handlerThreadPool.getTaskCount());
         } catch (Exception e) {
             logger.error("error fetching messages from queue {}:", pollingProperties.getQueueUrl(), e);
         }
