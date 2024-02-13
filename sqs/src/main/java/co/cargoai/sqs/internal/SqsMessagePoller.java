@@ -59,11 +59,13 @@ class SqsMessagePoller<T> {
 
     void pollMessages() {
         try {
-            List<Message> messages = messageFetcher.fetchMessages();
-            for (Message sqsMessage : messages) {
-                handleMessage(sqsMessage);
+            if (handlerThreadPool.getQueue().isEmpty()) {
+                List<Message> messages = messageFetcher.fetchMessages();
+                for (Message sqsMessage : messages) {
+                    handleMessage(sqsMessage);
+                }
             }
-            logger.info("number of task scheduled: {}", handlerThreadPool.getTaskCount());
+            logger.info("number of task scheduled: {}", handlerThreadPool.getQueue().size());
         } catch (Exception e) {
             logger.error("error fetching messages from queue {}:", pollingProperties.getQueueUrl(), e);
         }
