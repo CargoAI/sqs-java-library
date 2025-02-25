@@ -10,7 +10,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.awaitility:awaitility:4.2.2'
+    testImplementation 'org.awaitility:awaitility:4.3.0'
     testImplementation 'cloud.localstack:localstack-utils:0.2.21'
 }
 
